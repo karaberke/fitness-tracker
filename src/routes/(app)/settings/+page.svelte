@@ -7,7 +7,7 @@
 	import Field from '$lib/components/Field.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import { formatDate, formatLongDate, plural } from '$lib/format';
-	import { notify } from '$lib/toast.svelte';
+	import { announce } from '$lib/toast.svelte';
 
 	let { data, form }: { data: PageData; form: FormResult | null } = $props();
 	let saving = $state<string | null>(null);
@@ -24,9 +24,9 @@
 	};
 
 	$effect(() => {
-		if (form?.message) notify(form.message);
+		announce(form, form?.message);
 		// Delete errors have no field to attach to; show them as a toast instead.
-		if (form?.intent === 'deleteUser' && form.errors?.userId) notify(form.errors.userId, 'error');
+		if (form?.intent === 'deleteUser') announce(form, form.errors?.userId, 'error');
 	});
 </script>
 

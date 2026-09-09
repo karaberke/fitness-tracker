@@ -3,7 +3,7 @@
 @theme {
 	--font-sans: -apple-system, 'Helvetica Neue', system-ui, sans-serif;
 	--font-serif: 'Instrument Serif', Georgia, serif;
-	--font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, monospace;
 
 	--color-ink: #221e19;
 	--color-ink-soft: #262018;

@@ -7,7 +7,7 @@
 	import Field from '$lib/components/Field.svelte';
 	import MachineLink from '$lib/components/MachineLink.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { notify } from '$lib/toast.svelte';
+	import { announce } from '$lib/toast.svelte';
 
 	let { data, form }: { data: PageData; form: FormResult | null } = $props();
 	let busy = $state(false);
@@ -20,7 +20,7 @@
 	);
 
 	$effect(() => {
-		if (form?.message) notify(form.message);
+		announce(form, form?.message);
 	});
 </script>
 

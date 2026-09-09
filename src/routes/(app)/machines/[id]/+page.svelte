@@ -6,7 +6,7 @@
 	import ConfirmAction from '$lib/components/ConfirmAction.svelte';
 	import Field from '$lib/components/Field.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { notify } from '$lib/toast.svelte';
+	import { announce } from '$lib/toast.svelte';
 
 	let { data, form }: { data: PageData; form: FormResult | null } = $props();
 	let savingMachine = $state(false);
@@ -18,7 +18,7 @@
 	const machineValues = $derived(form?.intent === 'update' ? form.values : undefined);
 
 	$effect(() => {
-		if (form?.message) notify(form.message);
+		announce(form, form?.message);
 	});
 </script>
 

@@ -9,7 +9,7 @@
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import SetForm from '$lib/components/SetForm.svelte';
 	import { describeSet, formatDuration, formatLongDate, formatTime, plural } from '$lib/format';
-	import { notify } from '$lib/toast.svelte';
+	import { announce } from '$lib/toast.svelte';
 
 	let { data, form }: { data: PageData; form: FormResult | null } = $props();
 
@@ -48,7 +48,7 @@
 	}
 
 	$effect(() => {
-		if (form?.message) notify(form.message);
+		announce(form, form?.message);
 		if (form?.intent === 'addExercise' && !form.errors) {
 			showAddExercise = false;
 			newExerciseId = '';
@@ -63,7 +63,7 @@
 			if (form.intent === 'updateSet') editingSet = form.id ?? null;
 			if (form.intent === 'saveDetails') showDetails = true;
 			if (form.intent === 'reopen' && form.errors.workout)
-				notify(form.errors.workout, 'error', 5000);
+				announce(form, form.errors.workout, 'error', 5000);
 		}
 	});
 

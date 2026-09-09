@@ -47,6 +47,8 @@ You need [Docker](https://docs.docker.com/engine/install/) (with the compose plu
 
    Sign in with `ADMIN_EMAIL` / `ADMIN_PASSWORD`, then add everyone else under **Settings → Accounts**. Each person can change their own name, email and password under Settings.
 
+   On a phone, add the site to the home screen (iPhone: Share → _Add to Home Screen_). It then opens full-screen like an app, and the code, fonts and icons are cached on the device so only the data is fetched when switching pages.
+
 ### Day-to-day
 
 ```sh
