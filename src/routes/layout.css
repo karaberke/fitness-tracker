@@ -1,0 +1,51 @@
+@import 'tailwindcss';
+
+@theme {
+	--font-sans: -apple-system, 'Helvetica Neue', system-ui, sans-serif;
+	--font-serif: 'Instrument Serif', Georgia, serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+	--color-ink: #221e19;
+	--color-ink-soft: #262018;
+	--color-paper: #f2efe8;
+	--color-card: #fcfaf6;
+	--color-card-hover: #ede9e0;
+	--color-accent: #2e6bff;
+	--color-danger: #c2410c;
+	--color-success: #1a7f4b;
+}
+
+/* Small uppercase mono label used throughout the design. */
+@utility eyebrow {
+	@apply font-mono text-[11px] leading-none font-medium tracking-[.14em] uppercase;
+}
+
+/* Text inputs, selects and textareas share one look: tall, rounded, obvious focus ring. */
+@utility field-input {
+	@apply w-full rounded-2xl border border-ink-soft/20 bg-card px-4 text-base text-ink outline-none placeholder:text-ink-soft/40 focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:opacity-60;
+	min-height: 3rem;
+}
+
+@utility field-input-error {
+	@apply border-danger focus:border-danger focus:ring-danger/30;
+}
+
+html {
+	-webkit-tap-highlight-color: transparent;
+	background: var(--color-paper);
+}
+
+body {
+	@apply bg-paper font-sans text-ink antialiased;
+}
+
+/* Remove number-input spinners: the +/- buttons are the intended controls. */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type='number'] {
+	-moz-appearance: textfield;
+	appearance: textfield;
+}

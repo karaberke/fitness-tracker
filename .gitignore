@@ -1,0 +1,40 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build output
+/build
+/.svelte-kit
+.output
+.vercel
+.netlify
+.wrangler
+
+# Secrets and local config: only the placeholder and the test config are tracked
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Database dumps made with the backup commands in the README
+*.dump
+backup*.sql
+
+# Logs and caches
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.eslintcache
+coverage
+
+# Editors and OS
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+Thumbs.db
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

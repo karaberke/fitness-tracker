@@ -1,0 +1,51 @@
+# Full deployment: PostgreSQL + the app, built from this checkout.
+#
+#   cp .env.example .env      # set POSTGRES_PASSWORD, BETTER_AUTH_SECRET, ADMIN_* (and APP_PORT)
+#   docker compose -f compose.prod.yaml up -d --build
+#
+# Then open http://<this machine's LAN IP>:<APP_PORT> at home, or
+# http://<tailscale name or 100.x address>:<APP_PORT> from anywhere on your tailnet.
+# Variables marked `:?` must be present in `.env`; `docker compose` refuses to start otherwise.
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    ports:
+      # Localhost only, for backups with pg_dump; never reachable from other machines.
+      - '127.0.0.1:${POSTGRES_PORT:-5432}:5432'
+    environment:
+      # Only used the first time the volume is initialised.
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-local}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-local}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    image: fitness-tracker:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      # Published on every interface, so both the LAN and the Tailscale address work.
+      - '${APP_PORT:-3000}:3000'
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-root}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/${POSTGRES_DB:-local}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET in .env (openssl rand -base64 32)}
+      # First administrator, created on the first start.
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Set ADMIN_EMAIL in .env}
+      ADMIN_NAME: ${ADMIN_NAME:?Set ADMIN_NAME in .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env (8+ characters)}
+      TZ: ${TZ:-UTC}
+
+volumes:
+  # Same named volume as the development compose file (fitness-tracker_pgdata):
+  # existing data is kept. Only `docker compose down -v` deletes it; never run that.
+  pgdata:

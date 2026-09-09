@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    ports:
+      # Bound to localhost only: the database is never reachable from other machines.
+      - '127.0.0.1:${POSTGRES_PORT:-5432}:5432'
+    environment:
+      # Only used the first time the volume is initialised.
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mysecretpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-local}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-local}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  # Named volume: survives `docker compose down`; only `docker compose down -v` deletes it.
+  pgdata:
